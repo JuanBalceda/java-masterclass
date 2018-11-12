@@ -19,15 +19,33 @@ public class Maps {
         languajes.put("SQL", "Stands for Structured Query Language. SQL is used to communicate with a database. According to ANSI (American National Standards Institute), it is the standard language for relational database management systems.");
 
         if (languajes.containsKey("Java")) {
-            System.out.println("Java alreaady in the map");
+            System.out.println("Java already in the map");
         } else {
             languajes.put("Java", "This course is about Java");
         }
 
-        // languajes.remove("Python");
-
-        for (String key : languajes.keySet()) {
-            System.out.println(key + ": " + languajes.get(key));
+        if (languajes.remove("Python", "A data science language")) {
+            System.out.println("Python removed");
+        } else {
+            System.out.println("Python not removed, key/value pair not found");
         }
+
+        if (languajes.replace("SQL","Database manager","Database Manager languaje ")){
+            System.out.println("SQL was replaced");
+        }else {
+            System.out.println("SQL was not replaced");
+        }
+
+        languajes.replace("Scala", "A modern programming language that incorporates object-oriented and functional language procedures and features.");
+
+         printMap(languajes);
+    }
+
+    public static void printMap(Map<String, String> map){
+        System.out.println("====================");
+        for (String key : map.keySet()) {
+            System.out.println(key + ":\t" + map.get(key));
+        }
+        System.out.println("====================");
     }
 }
