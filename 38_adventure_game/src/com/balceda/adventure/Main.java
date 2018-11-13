@@ -44,15 +44,42 @@ public class Main {
             Map<String, Integer> exits = locations.get(loc).getExits();
             System.out.println("Available exits are: ");
             for (String exit : exits.keySet()) {
-                System.out.print(" · "+exit);
+                System.out.print(" · " + exit);
             }
             System.out.println();
 
             String direction = scanner.nextLine().toUpperCase();
-            if (exits.containsKey(direction)) {
-                loc = exits.get(direction);
-            } else {
-                System.out.println("You cannot go in that direction");
+            String goTo;
+            if (direction.toLowerCase().contains("north") || direction.equalsIgnoreCase("n")) {
+                goTo = "N";
+                if (validateDirection(exits, goTo)) {
+                    loc = exits.get(goTo);
+                } else {
+                    System.out.println("You cannot go in that direction");
+                }
+            } else if (direction.toLowerCase().contains("west") || direction.equalsIgnoreCase("w")) {
+                goTo = "W";
+                if (validateDirection(exits, goTo)) {
+                    loc = exits.get(goTo);
+                } else {
+                    System.out.println("You cannot go in that direction");
+                }
+            } else if (direction.toLowerCase().contains("east") || direction.equalsIgnoreCase("e")) {
+                goTo = "E";
+                if (validateDirection(exits, goTo)) {
+                    loc = exits.get(goTo);
+                } else {
+                    System.out.println("You cannot go in that direction");
+                }
+            } else if (direction.toLowerCase().contains("south") || direction.equalsIgnoreCase("s")) {
+                goTo = "S";
+                if (validateDirection(exits, goTo)) {
+                    loc = exits.get(goTo);
+                } else {
+                    System.out.println("You cannot go in that direction");
+                }
+            } else if (direction.toLowerCase().contains("quit") || direction.equalsIgnoreCase("q")) {
+                loc = 0;
             }
         }
         /*
@@ -69,5 +96,13 @@ public class Main {
             System.out.println(p);
         }
         */
+    }
+
+    public static boolean validateDirection(Map<String, Integer> exits, String direction) {
+        if (exits.containsKey(direction)) {
+            return true;
+        } else {
+            return false;
+        }
     }
 }
