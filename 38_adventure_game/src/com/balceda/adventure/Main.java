@@ -35,6 +35,13 @@ public class Main {
         locations.get(5).addExit("S", 1);
         locations.get(5).addExit("W", 2);
 
+        Map<String, String> vocabulary = new HashMap<>();
+        vocabulary.put("QUIT", "Q");
+        vocabulary.put("NORTH", "N");
+        vocabulary.put("SOUTH", "S");
+        vocabulary.put("EAST", "E");
+        vocabulary.put("WEST", "W");
+
         int loc = 1;
         while (true) {
             System.out.println(locations.get(loc).getDescription());
@@ -49,60 +56,23 @@ public class Main {
             System.out.println();
 
             String direction = scanner.nextLine().toUpperCase();
-            String goTo;
-            if (direction.toLowerCase().contains("north") || direction.equalsIgnoreCase("n")) {
-                goTo = "N";
-                if (validateDirection(exits, goTo)) {
-                    loc = exits.get(goTo);
-                } else {
-                    System.out.println("You cannot go in that direction");
+
+            if (direction.length() > 1) {
+                String[] words = direction.split(" ");
+                for (String word : words) {
+                    if (vocabulary.containsKey(word)) {
+                        direction = vocabulary.get(word);
+                        break;
+                    }
                 }
-            } else if (direction.toLowerCase().contains("west") || direction.equalsIgnoreCase("w")) {
-                goTo = "W";
-                if (validateDirection(exits, goTo)) {
-                    loc = exits.get(goTo);
-                } else {
-                    System.out.println("You cannot go in that direction");
-                }
-            } else if (direction.toLowerCase().contains("east") || direction.equalsIgnoreCase("e")) {
-                goTo = "E";
-                if (validateDirection(exits, goTo)) {
-                    loc = exits.get(goTo);
-                } else {
-                    System.out.println("You cannot go in that direction");
-                }
-            } else if (direction.toLowerCase().contains("south") || direction.equalsIgnoreCase("s")) {
-                goTo = "S";
-                if (validateDirection(exits, goTo)) {
-                    loc = exits.get(goTo);
-                } else {
-                    System.out.println("You cannot go in that direction");
-                }
-            } else if (direction.toLowerCase().contains("quit") || direction.equalsIgnoreCase("q")) {
-                loc = 0;
             }
-        }
-        /*
-        // Split method example
-        String road = "You're standing at the end of a road before a small brick building";
-        String building = "You're inside a building, a well house for a small spring";
 
-        String[] result = road.split(" ");
-        for (String p : result){
-            System.out.println(p);
-        }
-        String[] result2 = building.split(", ");
-        for (String p : result2){
-            System.out.println(p);
-        }
-        */
-    }
+            if (exits.containsKey(direction)) {
+                loc = exits.get(direction);
+            } else {
+                System.out.println("You cannot go in that direction");
+            }
 
-    public static boolean validateDirection(Map<String, Integer> exits, String direction) {
-        if (exits.containsKey(direction)) {
-            return true;
-        } else {
-            return false;
         }
     }
 }
