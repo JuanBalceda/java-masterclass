@@ -7,66 +7,89 @@ public class Main {
     private static StockList stockList = new StockList();
 
     public static void main(String[] args) {
-        StockItem temp = new StockItem("bread",0.86,100);
+        StockItem temp = new StockItem("bread", 0.86, 100);
         stockList.addStock(temp);
 
-        temp = new StockItem("cake",1.10,20);
+        temp = new StockItem("cake", 1.10, 20);
         stockList.addStock(temp);
-        temp = new StockItem("car",12.5,2);
+        temp = new StockItem("car", 12.5, 2);
         stockList.addStock(temp);
-        temp = new StockItem("chair",30.5,10);
+        temp = new StockItem("chair", 30.5, 10);
         stockList.addStock(temp);
-        temp = new StockItem("cup",0.56,200);
+        temp = new StockItem("cup", 0.56, 200);
         stockList.addStock(temp);
-        temp = new StockItem("cup",0.40,7);
+        temp = new StockItem("cup", 0.40, 7);
         stockList.addStock(temp);
-        temp = new StockItem("juice",2.50,100);
+        temp = new StockItem("juice", 2.50, 100);
         stockList.addStock(temp);
-        temp = new StockItem("door",72,4);
+        temp = new StockItem("door", 72, 4);
         stockList.addStock(temp);
-        temp = new StockItem("phone",150.60,50);
+        temp = new StockItem("phone", 150.60, 50);
         stockList.addStock(temp);
-        temp = new StockItem("towel",5.70,15);
+        temp = new StockItem("towel", 5.70, 15);
         stockList.addStock(temp);
 
         System.out.println(stockList);
-
-        for (String s : stockList.items().keySet()){
-            System.out.println(s);
-        }
 
         Basket basket = new Basket("Juan");
-        sellItem(basket, "phone",2);
-        System.out.println(basket);
+        sellItem(basket, "phone", 2);
+        sellItem(basket, "car", 1);
+        sellItem(basket, "cup", 100);
+        sellItem(basket, "laptop", 2);
 
-        sellItem(basket, "car",2);
-        System.out.println(basket);
 
-        sellItem(basket, "cup",100);
-        System.out.println(basket);
+        Basket basket2 = new Basket("TIm");
+        sellItem(basket2, "phone", 3);
+        sellItem(basket2, "car", 1);
+        sellItem(basket2, "cup", 50);
 
-        sellItem(basket, "laptop",2);
+        removeItem(basket2, "phone", 1);
+        removeItem(basket, "car", 1);
+
         System.out.println(basket);
+        System.out.println(basket2);
 
         System.out.println(stockList);
 
-        for (Map.Entry<String, Double> prices : stockList.priceList().entrySet()){
-            System.out.println(prices.getKey() + " costs " + prices.getValue());
-        }
+        checkOut(basket);
+        checkOut(basket2);
+
+        System.out.println(stockList);
+
     }
 
-    public static int sellItem(Basket basket, String item, int quantity){
+    public static int sellItem(Basket basket, String item, int quantity) {
         StockItem stockItem = stockList.get(item);
-        if (stockItem == null){
-            System.out.println("We don't sell "+item);
+        if (stockItem == null) {
+            System.out.println("We don't sell " + item);
             return 0;
         }
 
-        if (stockList.sellStock(item, quantity) != 0){
-            basket.addToBasket(stockItem,quantity);
-            return quantity;
+        if (stockList.reserveStock(item, quantity) != 0) {
+            return basket.addToBasket(stockItem, quantity);
         }
 
         return 0;
+    }
+
+    public static int removeItem(Basket basket, String item, int quantity) {
+        StockItem stockItem = stockList.get(item);
+        if (stockItem == null) {
+            System.out.println("We don't sell " + item);
+            return 0;
+        }
+
+        if (basket.removeFromBasket(stockItem, quantity) == quantity) {
+            return stockList.unreserveStock(item, quantity);
+        }
+
+        return 0;
+    }
+
+    public static void checkOut(Basket basket) {
+        for (Map.Entry<StockItem, Integer> item : basket.items().entrySet()) {
+            stockList.sellStock(item.getKey().getName(), item.getValue());
+        }
+        basket.clearBasket();
     }
 }
