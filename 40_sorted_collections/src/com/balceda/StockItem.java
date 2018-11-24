@@ -5,6 +5,7 @@ public class StockItem implements Comparable<StockItem> {
     private final String name;
     private double price;
     private int quantityStock; // Can be initialize here.
+    private int reserved = 0;
 
     public StockItem(String name, double price, int quantityStock) {
         this.name = name;
@@ -27,7 +28,7 @@ public class StockItem implements Comparable<StockItem> {
     }
 
     public int getQuantityStock() {
-        return quantityStock;
+        return quantityStock - reserved;
     }
 
     public void setPrice(double price) {
@@ -39,6 +40,31 @@ public class StockItem implements Comparable<StockItem> {
         int newQuantity = this.quantityStock + quantity;
         if (newQuantity >= 0.0)
             this.quantityStock = newQuantity;
+    }
+
+    public int reserveStock(int quantity) {
+        if (quantity <= getQuantityStock()) {
+            reserved += quantity;
+            return quantity;
+        }
+        return 0;
+    }
+
+    public int unreserveStock(int quantity) {
+        if (quantity <= reserved) {
+            reserved -= quantity;
+            return quantity;
+        }
+        return 0;
+    }
+
+    public int finalizeStock(int quantity) {
+        if (quantity <= reserved) {
+            quantityStock -= quantity;
+            reserved -= quantity;
+            return quantity;
+        }
+        return 0;
     }
 
     @Override
@@ -72,8 +98,6 @@ public class StockItem implements Comparable<StockItem> {
 
     @Override
     public String toString() {
-        return "StockItem{" +
-                "name='" + name + '\'' +
-                ", price=" + price + '}';
+        return "StockItem: " + name + ", price: " + price;
     }
 }

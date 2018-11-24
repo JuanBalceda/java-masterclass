@@ -1,5 +1,7 @@
 package com.balceda;
 
+import java.util.Map;
+
 public class Main {
 
     private static StockList stockList = new StockList();
@@ -47,6 +49,10 @@ public class Main {
         System.out.println(basket);
 
         System.out.println(stockList);
+
+        for (Map.Entry<String, Double> prices : stockList.priceList().entrySet()){
+            System.out.println(prices.getKey() + " costs " + prices.getValue());
+        }
     }
 
     public static int sellItem(Basket basket, String item, int quantity){
